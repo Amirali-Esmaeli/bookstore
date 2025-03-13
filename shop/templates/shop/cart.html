@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبد خرید</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+     <div class="container mt-5">
+        <h1 class="text-center mb-4">سبد خرید</h1>
+        <ul class="list-group mb-4">
+            {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>{{ item.book.title }}</div>
+                <div class="d-flex align-items-center">
+                    <form method="post" action="{% url 'update_cart' item.book.id %}" class="d-flex me-3">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="0" class="form-control me-2" style="width: 70px;">
+                        <button type="submit" class="btn btn-primary btn-sm">به‌روزرسانی</button>
+                    </form>
+                    <span class="badge bg-secondary me-2">{{item.price}} تومان</span>
+                    <a href="{% url 'remove_from_cart' item.book.id %}" class="btn btn-danger btn-sm">حذف</a>
+                </div>
+            </li>
+            {%empty%}
+            <li class="list-group-item text-center">سبد خرید خالی است</li>
+            {% endfor %}
+        </ul>
+        <p class="text-end fw-bold">جمع کل: {{ total_price }} تومان</p>
+        <div class="text-center">
+            <a href="{% url 'checkout' %}" class="btn btn-success">نهایی کردن خرید</a>
+            <a href="{% url 'book_list' %}" class="btn btn-outline-primary">بازگشت به فروشگاه</a>
+        </div>
+     </div>
+</body>
+</html>
