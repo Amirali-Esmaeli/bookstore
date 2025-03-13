@@ -28,6 +28,7 @@ def signup(request):
 def add_to_cart(request,book_id):
     book = get_object_or_404(Book, id=book_id)
     cart = request.session.get('cart',{})
+    book_id = str(book_id)
     cart[book_id] = cart.get(book_id,0) + 1
     request.session['cart'] = cart
     return redirect('cart_view')
@@ -36,18 +37,32 @@ def cart_view(request):
     cart = request.session.get('cart',{})
     cart_items = []
     total_price = 0
+    price = 0
     for book_id, quantity in cart.items():
         book = get_object_or_404(Book, id=book_id)
+        price += book.price * quantity
         total_price += book.price * quantity
-        cart_items.append({'book':book,'quantity':quantity})
+        cart_items.append({'book':book,'quantity':quantity ,'price':price})
+        price=0
     return render(request, 'shop/cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
 def remove_from_cart(request,book_id):
     cart = request.session.get('cart', {})
-    if book_id in cart:
-        del cart[book_id]
+    book_id = str(book_id)
+    cart.pop(book_id, None)
     request.session['cart'] = cart
     return redirect('cart_view')
+
+def update_cart(request,book_id):
+    if request.method == "POST":
+        cart = request.session.get('cart', {})
+        quantity = int(request.POST.get('quantity', 0))
+        if quantity > 0:
+            cart[book_id] = quantity
+        else:
+            cart.pop(book_id, None)
+        request.session['cart'] = cart
+    return redirect('cart_view')       
 
 @login_required
 def checkout(request):
