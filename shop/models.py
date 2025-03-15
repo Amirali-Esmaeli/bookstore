@@ -40,7 +40,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def total_price(self):
-        return sum(item.quantity * item.book.price for item in self.order_item.all())
+        return sum(item.quantity * item.book.price for item in self.order_items.all())
 
     def __str__(self):
         return f"سفارش {self.id} - {self.user.username}"

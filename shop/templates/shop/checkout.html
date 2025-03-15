@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نهایی کردن خرید</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">نهایی کردن خرید</h1>
+        {% if cart_items %}
+            <div class="list-group mb-4">
+                {% for item in cart_items %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>{{ item.book.title }} - {{ item.quantity }} عدد</div>
+                    <div>
+                        <span class="badge bg-secondary">{{ item.price }} تومان</span>
+                    </div>
+                </div>
+            {%empty%}
+                <div class="list-group-item text-center">سبد خرید خالی است</div>
+            {% endfor %}
+            </div>
+            <p class="text-end fw-bold">جمع کل: {{ total_price }} تومان</p>
+            <form method="POST" class="text-center">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">ثبت سفارش</button>
+                <a href="{% url 'cart_view' %}" class="btn btn-outline-primary">بازگشت به سبد خرید</a>
+            </form>
+        {% else %}
+            <p class="text-center">سبد خرید خالی است</p>
+            <div class="text-center">
+                <a href="{% url 'book_list' %}" class="btn btn-outline-primary">بازگشت به فروشگاه</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

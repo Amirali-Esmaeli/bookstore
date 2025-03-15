@@ -73,11 +73,28 @@ def checkout(request):
         book = get_object_or_404(Book, id=book_id)
         OrderItem.objects.create(order=order, book=book, quantity=quantity)
       request.session['cart'] = {}
-      return redirect('order_history')  
-    cart_items = [get_object_or_404(Book, id=book_id) for book_id in cart.keys()]
-    return render(request, 'shop/checkout.html', {'cart_items': cart_items})
+      return redirect('order_history') 
+    cart_items=[]
+    price = 0
+    total_price = 0
+    for book_id, quantity in cart.items():
+        book = get_object_or_404(Book, id=book_id)
+        price= book.price * quantity
+        total_price += price
+        cart_items.append({'book': book, 'quantity': quantity ,'price':price})
+        price=0
+    return render(request, 'shop/checkout.html', {'cart_items': cart_items ,'total_price':total_price})
 
 @login_required
 def order_history(request):
+    price = 0
+    order_data = []
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'shop/order_history.html', {'orders':orders})
+    for order in orders:
+        items = []
+        for item in order.order_items.all():
+            price = item.quantity * item.book.price
+            items.append({'book': item.book, 'quantity': item.quantity, 'price': price})
+            price = 0
+        order_data.append({'items': items ,'order': order})
+    return render(request, 'shop/order_history.html', {'order_data': order_data})
