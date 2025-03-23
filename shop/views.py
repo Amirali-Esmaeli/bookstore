@@ -1,8 +1,8 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.contrib.auth import login
+from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from .models import Book, Order, OrderItem
+from .forms import CustomUserCreationForm,CustomAuthenticationForm
 
 # Create your views here.
 
@@ -16,14 +16,29 @@ def book_detail(request,book_id):
 
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('book_list')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'shop/signup.html', {'form': form})
+
+def user_login(request):
+    if request.method == "POST":
+        form = CustomAuthenticationForm(request.POST, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('book_list')
+    else:
+        form = CustomAuthenticationForm()
+    return render(request, 'shop/login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('book_list')
 
 def add_to_cart(request,book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -57,7 +72,8 @@ def update_cart(request,book_id):
     if request.method == "POST":
         cart = request.session.get('cart', {})
         quantity = int(request.POST.get('quantity', 0))
-        if quantity > 0:
+        book = get_object_or_404(Book, id=book_id)
+        if quantity > 0 and quantity <= book.stock:
             cart[book_id] = quantity
         else:
             cart.pop(book_id, None)
@@ -72,6 +88,8 @@ def checkout(request):
       for book_id, quantity in cart.items():
         book = get_object_or_404(Book, id=book_id)
         OrderItem.objects.create(order=order, book=book, quantity=quantity)
+        book.stock -= quantity
+        book.save()
       request.session['cart'] = {}
       return redirect('order_history') 
     cart_items=[]
@@ -84,6 +102,7 @@ def checkout(request):
         cart_items.append({'book': book, 'quantity': quantity ,'price':price})
         price=0
     return render(request, 'shop/checkout.html', {'cart_items': cart_items ,'total_price':total_price})
+    
 
 @login_required
 def order_history(request):
