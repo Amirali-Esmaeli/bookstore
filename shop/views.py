@@ -2,7 +2,9 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from .models import Book, Order, OrderItem
-from .forms import CustomUserCreationForm,CustomAuthenticationForm
+from .forms import CustomUserCreationForm,CustomAuthenticationForm,CustomPasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -117,3 +119,12 @@ def order_history(request):
             price = 0
         order_data.append({'items': items ,'order': order})
     return render(request, 'shop/order_history.html', {'order_data': order_data})
+
+class CustomPasswordChangeView(PasswordChangeView):
+    form_class = CustomPasswordChangeForm 
+    template_name = 'shop/password_change.html'
+    success_url = reverse_lazy('password_change_done')
+    
+
+def password_change_done(request):
+    return render(request, 'shop/password_change_done.html')
