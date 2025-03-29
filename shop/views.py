@@ -147,3 +147,8 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'shop/password_reset_complate.html'
 
+
+def search_books(request):
+    query = request.GET.get('q', '')
+    books = Book.objects.filter(title__icontains=query) | Book.objects.filter(author__icontains=query)
+    return render(request, 'shop/book_list.html', {'books': books, 'query': query})
