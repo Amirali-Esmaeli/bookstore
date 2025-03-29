@@ -12,8 +12,8 @@ class User(AbstractUser):
         blank = True, 
         null = True,
         validators = [RegexValidator(regex=r'^\d{11}$', message="شماره تلفن باید 11 رقم باشد.")])
-    groups = models.ManyToManyField(Group, related_name="shop_users")
-    user_permissions = models.ManyToManyField(Permission, related_name="shop_user_permissions")
+    groups = models.ManyToManyField(Group, related_name="shop_users",blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="shop_user_permissions",blank=True)
 
     def __str__(self):
         return self.username 

@@ -1,9 +1,12 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
-from .models import Book, Order, OrderItem
-from .forms import CustomUserCreationForm,CustomAuthenticationForm,CustomPasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Book, Order, OrderItem, User
+from .forms import (CustomUserCreationForm,CustomAuthenticationForm,CustomPasswordChangeForm,
+                    CustomPasswordResetForm,CustomPasswordResetConfirmForm)
+from django.contrib.auth.views import (PasswordChangeView,PasswordResetView,PasswordResetDoneView,
+                                       PasswordResetConfirmView,PasswordResetCompleteView)
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -128,3 +131,19 @@ class CustomPasswordChangeView(PasswordChangeView):
 
 def password_change_done(request):
     return render(request, 'shop/password_change_done.html')
+
+class CustomPasswordResetView(PasswordResetView,LoginRequiredMixin):
+    form_class = CustomPasswordResetForm
+    template_name = 'shop/password_reset.html'
+    
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'shop/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomPasswordResetConfirmForm
+    template_name = 'shop/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'shop/password_reset_complate.html'
+
