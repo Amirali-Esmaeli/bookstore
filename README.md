@@ -31,15 +31,26 @@
    cd bookstore
 
 3. **ایجاد محیط مجازی (اختیاری اما توصیه شده):**
+    ```bash
     python -m venv venv
-    در Windows: venv\Scripts\activate
-    در Linux/Mac: source venv/bin/activate
+    ```
+    در Windows:
+    ```cmd
+    venv\Scripts\activate
+    ```
+    در Linux/Mac:
+    ```bash
+    source venv/bin/activate
+    ```
 
 4. **نصب وابستگی‌ها:**
+    ```bash
     pip install -r requirements.txt
+    ```
 
 5. **پیکربندی دیتابیس:**
-    DATABASES = {
+    ```bash
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'your_database_name',  # نام دیتابیس خود را وارد کنید
@@ -47,80 +58,101 @@
         'PASSWORD': 'your_mysql_password',  # رمز عبور خود را وارد کنید
         'HOST': 'localhost',
         'PORT': '3306',
+        }
     }
-}
 
 6. **اجرای مهاجرت‌ها:**
+    ```bash
     python manage.py makemigrations
     python manage.py migrate
 
 7. **ایجاد کاربر ادمین:**
+    ```bash
     python manage.py createsuperuser
 
 8. **اجرای پروژه:**
+    ```bash
     python manage.py runserver
+    ```
     برو http://127.0.0.1:8000/ حالا به آدرس 
 
 9. **اجرای تست ها:**
+    ```bash
     python manage.py test
 
-**ساختار پروژه**
-shop/models.py: تعریف مدل‌های User, Book, Order, OrderItem
-shop/admin.py:  Django ثبت مدل‌ها در پنل ادمین 
-shop/views.py: منطق بک‌اند برای ویوها
-shop/urls.py: مسیرهای URL
-shop/forms.py: فرم‌های سفارشی برای عملیات‌های ورود، ثبت‌نام، و تغییر رمز عبور
-shop/templates/shop/: قالب‌های HTML
-shop/tests.py: تست‌های واحد.
+**ساختار پروژه:**
+
+- `shop/models.py` : تعریف مدل‌های `User`، `Book`، `Order` و `OrderItem`
+- `shop/admin.py` : ثبت مدل‌ها در پنل ادمین Django
+- `shop/views.py` : منطق مربوط به ویوهای بک‌اند
+- `shop/urls.py` : تعریف مسیرهای URL اپلیکیشن
+- `shop/forms.py` : فرم‌های سفارشی برای ورود، ثبت‌نام، تغییر رمز عبور و غیره
+- `shop/templates/shop/` : قالب‌های HTML مربوط به صفحات مختلف
+- `shop/tests.py` : شامل تست‌های واحد (unit tests) برای بررسی عملکرد بخش‌های مختلف
 
 **نکات اضافی**
-برای اضافه کردن کتاب، از پنل ادمین (/admin/) استفاده کن
-بازنشانی رمز عبور توی کنسول چاپ می‌شه (برای تست محلی)
+
+- برای اضافه کردن کتاب، از پنل ادمین (/admin/) استفاده کن
+- بازنشانی رمز عبور توی کنسول چاپ می‌شه (برای تست محلی)
 
 **توسعه‌دهنده**
-نام: [امیرعلی اسماعیلی]
-[amiraliesmaeli741@gmail.com] :ایمیل 
-[https://github.com/Amirali-Esmaeli?tab=repositories] : گیت‌هاب 
+
+- **نام:** امیرعلی اسماعیلی  
+- **ایمیل:** [amiraliesmaeli741@gmail.com](mailto:amiraliesmaeli741@gmail.com)  
+- **گیت‌هاب:** [github.com/Amirali-Esmaeli](https://github.com/Amirali-Esmaeli?tab=repositories)
 </div> 
 
-Online Bookstore (English Version)
+# Online Bookstore
 A simple and functional online bookstore project built with Django, featuring core e-commerce functionalities. This project was designed to learn backend concepts and prepare for a backend internship.
 
-Features
-Product Management: Display book list and details (title, author, price, stock)
-Shopping Cart: Add, update quantity, and remove books from the cart using sessions
-Orders: Place orders and view order history per user
-Authentication: Sign up, login, logout, password change, and password reset
-Search: Filter books by title or author
-User Interface: Responsive design with Bootstrap 5
-Testing: Unit tests to ensure proper functionality of views and models
+## Features
 
-Technologies
-Django 4.x: Main backend framework
-MySQL: Database used in this project
-Bootstrap 5: For the user interface
-Python 3.x: Programming language
+- **Product Management**: Display book list and details (title, author, price, stock)  
+- **Shopping Cart**: Add, update quantity, and remove books from the cart using sessions  
+- **Orders**: Place orders and view order history per user  
+- **Authentication**: Sign up, login, logout, password change, and password reset  
+- **Search**: Filter books by title or author  
+- **User Interface**: Responsive design with Bootstrap 5  
+- **Testing**: Unit tests to ensure proper functionality of views and models  
 
-Installation and Setup
-1.Prerequisites:
-Python 3.8 or higher
-Git
-MySQL (for using MySQL database)
-Pillow (for image processing)
+## Technologies
+**Django 4.x**: Main backend framework
+**MySQL**: Database used in this project
+**Bootstrap 5**: For the user interface
+**Python 3.x**: Programming language
 
-2.Clone the Project:
-git clone https://github.com/Amirali-Esmaeli/bookstore.git
-cd bookstore
+## Installation and Setup
+1. **Prerequisites:**
+- Python 3.8 or higher
+- Git
+- MySQL (for using MySQL database)
+- Pillow (for image processing)
 
-3.Create a Virtual Environment (optional but recommended):
-python -m venv venv
-On Windows: venv\Scripts\activate
-On Linux/Mac: source venv/bin/activate
+2. **Clone the Project:**
+    ```bash
+    git clone https://github.com/Amirali-Esmaeli/bookstore.git
+    cd bookstore
 
-4.Install Dependencies:
-pip install -r requirements.txt
+3. **Create a Virtual Environment (optional but recommended):**
+    ```bash
+    python -m venv venv
+    ```
+    On Windows:
+    ```cmd
+    venv\Scripts\activate
+    ```
+    On Linux/Mac:
+    ```bash
+    source venv/bin/activate
+    ```
 
-5.Database Configuration: In settings.py:
+4. **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+5. **Database Configuration: In settings.py:**
+    ```bash
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -132,35 +164,41 @@ DATABASES = {
     }
 }
 
-6.Run Migrations:
-python manage.py makemigrations
-python manage.py migrate
+6. **Run Migrations:**
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
 
-7.Create Admin User:
-python manage.py createsuperuser
+7. **Create Admin User:**
+    ```bash
+    python manage.py createsuperuser
 
-8.Run the Project:
-python manage.py runserver
-Go to http://127.0.0.1:8000/.
+8. **Run the Project:**
+    ```bash
+    python manage.py runserver
+    ```
+    Go to http://127.0.0.1:8000/.
 
-9.Run Tests:
-python manage.py test shop
+9. **Run Tests:**
+    ```bash
+    python manage.py test shop
 
-Project Structure
-shop/models.py: Defines User, Book, Order, OrderItem models
-shop/admin.py: Registers models in Django admin panel
-shop/views.py: Backend logic for views
-shop/urls.py: URL routes
-shop/forms.py: Custom forms for login, signup, and password change
-shop/templates/shop/: HTML templates
-shop/tests.py: Unit tests
+**Project Structure**
+- `shop/models.py`: Defines `User`, `Book`, `Order`, `OrderItem` models
+- `shop/admin.py`: Registers models in Django admin panel
+- `shop/views.py`: Backend logic for views
+- `shop/urls.py`: URL routes
+- `shop/forms.py`: Custom forms for login, signup, and password change
+- `shop/templates/shop/`: HTML templates
+- `shop/tests.py`: Unit tests
 
-Additional Notes
-Add books via the admin panel (/admin/).
-Password reset links are printed to the console (for local testing).
+**Additional Notes**
+- Add books via the admin panel (/admin/).
+- Password reset links are printed to the console (for local testing).
 
-Developer
-Name: Amirali Esmaeli
-Email: amiraliesmaeli741@gmail.com
-GitHub: https://github.com/Amirali-Esmaeli
+**Developer**
+
+- **Name**: Amirali Esmaeli
+- **Email**: [amiraliesmaeli741@gmail.com](mailto:amiraliesmaeli741@gmail.com)
+- **GitHub**: [https://github.com/Amirali-Esmaeli](https://github.com/Amirali-Esmaeli?tab=repositories)
 
