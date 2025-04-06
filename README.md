@@ -49,13 +49,13 @@
     ```
 
 5. **پیکربندی دیتابیس:**
-    ```bash
-DATABASES = {
+    ```cmd
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'your_database_name',  # نام دیتابیس خود را وارد کنید
-        'USER': 'your_mysql_user',     # نام کاربری MySQL خود را وارد کنید
-        'PASSWORD': 'your_mysql_password',  # رمز عبور خود را وارد کنید
+        'NAME': 'bookstore_db',  # نام دیتابیست رو بسازید
+        'USER': 'your_mysql_user',
+        'PASSWORD': 'your_mysql_password',
         'HOST': 'localhost',
         'PORT': '3306',
         }
@@ -152,17 +152,17 @@ A simple and functional online bookstore project built with Django, featuring co
     ```
 
 5. **Database Configuration: In settings.py:**
-    ```bash
-DATABASES = {
+   ```cmd
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'your_database_name',  # Enter your database name
-        'USER': 'your_mysql_user',     # Enter your MySQL username
-        'PASSWORD': 'your_mysql_password',  # Enter your password
+        'NAME': 'bookstore_db',  # Create your database
+        'USER': 'your_mysql_user',
+        'PASSWORD': 'your_mysql_password',
         'HOST': 'localhost',
         'PORT': '3306',
+        }
     }
-}
 
 6. **Run Migrations:**
     ```bash
