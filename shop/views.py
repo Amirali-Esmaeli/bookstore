@@ -2,7 +2,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, Order, OrderItem, User
+from .models import Book, Order, OrderItem,Category
 from .forms import (CustomUserCreationForm,CustomAuthenticationForm,CustomPasswordChangeForm,
                     CustomPasswordResetForm,CustomPasswordResetConfirmForm)
 from django.contrib.auth.views import (PasswordChangeView,PasswordResetView,PasswordResetDoneView,
@@ -12,8 +12,22 @@ from django.urls import reverse_lazy
 # Create your views here.
 
 def book_list(request):
-    books = Book.objects.all()
-    return render(request, 'shop/book_list.html', {'books':books})
+    category_id = request.GET.get('category')
+    categories = Category.objects.all()
+    if category_id:
+        books = Book.objects.filter(categories__id=category_id)
+    else:
+        books = Book.objects.all()
+    return render(request, 'shop/book_list.html', {'books':books ,'categories': categories,
+        'selected_category': category_id})
+
+def category_detail(request,slug):
+    category = Category.objects.get(slug=slug)
+    books = Book.objects.filter(categories=category)
+    return render(request, 'shop/category_detail.html', {
+        'category': category,
+        'books': books
+    })
 
 def book_detail(request,book_id):
     book = get_object_or_404(Book , id=book_id)
