@@ -17,6 +17,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username 
+    
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+    
 
 class Book(models.Model):
     title = models.CharField(_("عنوان"), max_length=255)
@@ -25,6 +33,7 @@ class Book(models.Model):
     price = models.IntegerField(_("قیمت"))
     image = models.ImageField(upload_to='books/', blank=True , null=True)
     stock = models.IntegerField(_("موجودی") , default=10)
+    categories = models.ManyToManyField(Category, blank=True)
 
     def __str__(self):
         return self.title
@@ -52,3 +61,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.book.title}"
+    
+
+    
