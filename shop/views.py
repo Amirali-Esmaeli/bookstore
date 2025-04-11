@@ -21,14 +21,6 @@ def book_list(request):
     return render(request, 'shop/book_list.html', {'books':books ,'categories': categories,
         'selected_category': category_id})
 
-def category_detail(request,slug):
-    category = Category.objects.get(slug=slug)
-    books = Book.objects.filter(categories=category)
-    return render(request, 'shop/category_detail.html', {
-        'category': category,
-        'books': books
-    })
-
 def book_detail(request,book_id):
     book = get_object_or_404(Book , id=book_id)
     return render(request, 'shop/book_detail.html', {'book':book} )

@@ -55,13 +55,19 @@
                         <p class="card-text">موجودی: {{ book.stock }}</p>
                         <p class="card-text">توضیحات: {{ book.description }}</p>
                         <p class="card-text">دسته‌بندی‌ها: 
-                            <!--Notion-->
                             {% for category in book.categories.all %}
                                 {{ category.name }}{% if not forloop.last %}, {% endif %}
                             {% empty %}
                                 بدون دسته‌بندی
                             {% endfor %}
                         </p>
+                        {% if book.sample_file %}
+                        <p class="card-text">
+                        نمونه فایل: <a href="{{ book.sample_file.url }}" target="_blank">دانلود</a>
+                        </p>
+                        {% else %}
+                        <p class="card-text">نمونه فایل: نمونه فایلی برا این کتاب وجود ندارد</p>
+                        {% endif %}
                         <a href="{% url 'add_to_cart' book.id %}" class="btn btn-primary">اضافه به سبد خرید</a>
                         <a href="{% url 'book_list' %}" class="btn btn-outline-secondary mt-2">بازگشت به فروشگاه</a>
                     </div>

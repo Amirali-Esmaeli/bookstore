@@ -33,6 +33,7 @@ class Book(models.Model):
     price = models.IntegerField(_("قیمت"))
     image = models.ImageField(upload_to='books/', blank=True , null=True)
     stock = models.IntegerField(_("موجودی") , default=10)
+    sample_file = models.FileField(upload_to='samples/', null=True, blank=True)
     categories = models.ManyToManyField(Category, blank=True)
 
     def __str__(self):
