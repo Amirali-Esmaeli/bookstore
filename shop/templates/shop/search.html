@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width= , initial-scale=1.0">
+    <title>جستجوی کتاب</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'book_list' %}">فروشگاه کتاب</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link">خوش آمدید، {{ user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart_view' %}">سبد خرید</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'order_history' %}">سفارش‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">خروج</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">ورود</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'signup' %}">ثبت‌نام</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>جستجوی کتاب</h2>
+        <form method="get" action="{% url 'search_books' %}" class="mb-4">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="q" class="form-label">جستجو</label>
+                    <input type="text" name="q" id="q" class="form-control" value="{{ query }}" placeholder="عنوان، نویسنده یا توضیحات">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="categories" class="form-label">دسته‌بندی‌ها</label>
+                    <select name="categories" id="categories" class="form-select" multiple>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" in selected_categories %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="min_price" class="form-label">حداقل قیمت</label>
+                    <input type="number" name="min_price" id="min_price" class="form-control" value="{{ min_price }}" placeholder="مثال: 10000">    
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="max_price" class="form-label">حداکثر قیمت</label>
+                    <input type="number" name="max_price" id="max_price" class="form-control" value="{{ max_price }}" placeholder="مثال: 50000">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="stock" class="form-label">موجودی</label>
+                    <select name="stock" id="stock" class="form-select">
+                        <option value=""{% if not stock_filter %}selectde{% endif %}>همه</option>
+                        <option value="in_stock" {% if stock_filter == 'in_stock' %}selected{% endif %}>فقط موجود</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="sort_by" class="form-label">مرتب سازی</label>
+                    <select name="sort_by" id="sort_by" class="form-select">
+                        <option value="title" {%if sort_by == 'title'%}selected{%endif%}>عنوان (الف-ی)</option>
+                        <option value="-title" {% if sort_by == '-title' %}selected{% endif %}>عنوان (ی-الف)</option>
+                        <option value="price" {%if sort_by == 'price'%}selected{%endif%}>قیمت (کم به زیاد)</option>
+                        <option value="-price" {% if sort_by == '-price' %}selected{% endif %}>قیمت (زیاد به کم)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">جستجو</button>
+        </form>
+
+        <!--نتایج-->
+        <h3>نتایج</h3>
+        <div class="row">
+            {% for book in books %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{book.title}}</h5>
+                            <p class="card-text">نویسنده: {{ book.author }}</p>
+                            <p class="card-text">قیمت: {{book.price}} تومان</p>
+                            <p class="card-text">دسته بندی:
+                                {% for category in book.categories.all %}
+                                    {{category.name}}{%if not forloop.last%},{%endif%}
+                                    {%empty%}
+                                        بدون دسته بندی
+                                {% endfor %}
+                            </p>
+                            <a href="{%url 'book_detail' book.id %}" class="btn btn-primary">جزئیات</a>
+                        </div>
+                    </div>
+                </div>
+                {%empty%}
+                <p>کتابی یافت نشد</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

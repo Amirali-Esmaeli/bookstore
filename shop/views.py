@@ -8,6 +8,7 @@ from .forms import (CustomUserCreationForm,CustomAuthenticationForm,CustomPasswo
 from django.contrib.auth.views import (PasswordChangeView,PasswordResetView,PasswordResetDoneView,
                                        PasswordResetConfirmView,PasswordResetCompleteView)
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 # Create your views here.
 
@@ -156,5 +157,52 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 def search_books(request):
     query = request.GET.get('q', '')
-    books = Book.objects.filter(title__icontains=query) | Book.objects.filter(author__icontains=query)
-    return render(request, 'shop/book_list.html', {'books': books, 'query': query})
+    category_ids = request.GET.getlist('categories')
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
+    sort_by = request.GET.get('sort_by', 'title')
+    stock_filter = request.GET.get('stock', '')
+
+    books = Book.objects.all()
+
+    if query:
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query)|
+            Q(description__icontains=query)
+        )
+    
+    if category_ids:
+        books = books.filter(categories__id__in=category_ids).distinct()
+
+    if min_price:
+        try:
+            books = books.filter(price__gte=float(min_price))
+        except ValueError:
+            pass
+    
+    if max_price:
+        try:
+            books = books.filter(price__lte=float(max_price))
+        except ValueError:
+            pass
+    
+    if stock_filter == 'in_stock':
+        books = books.filter(stock__gt=0)
+
+    if sort_by in ['price', '-price', 'title', '-title']:
+        books = books.order_by(sort_by)
+
+    categories = Category.objects.all()
+
+    context = {
+        'books':books,
+        'categories':categories,
+        'query': query,
+        'selected_categories': category_ids,
+        'min_price': min_price,
+        'max_price': max_price,
+        'sort_by': sort_by,
+        'stock_filter': stock_filter,
+    }
+    return render(request, 'shop/search.html',context)
