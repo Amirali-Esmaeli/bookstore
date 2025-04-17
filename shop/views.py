@@ -9,7 +9,7 @@ from django.contrib.auth.views import (PasswordChangeView,PasswordResetView,Pass
                                        PasswordResetConfirmView,PasswordResetCompleteView)
 from django.urls import reverse_lazy
 from django.db.models import Q
-
+from django.core.paginator import Paginator
 # Create your views here.
 
 def book_list(request):
@@ -195,8 +195,12 @@ def search_books(request):
 
     categories = Category.objects.all()
 
+    paginator = Paginator(books, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'books':books,
+        'books':page_obj,
         'categories':categories,
         'query': query,
         'selected_categories': category_ids,
@@ -204,5 +208,6 @@ def search_books(request):
         'max_price': max_price,
         'sort_by': sort_by,
         'stock_filter': stock_filter,
+        'page_obj': page_obj,
     }
     return render(request, 'shop/search.html',context)
