@@ -133,7 +133,7 @@
             {% endfor %}
             {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query|urlencode }}{% endif %}{% for cat in selected_categories %}&categories={{ cat }}{% endfor %}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}{% if stock_filter %}&stock={{ stock_filter }}{% endif %}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}">بعدی</a>
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% for cat in selected_categories %}&categories={{ cat }}{% endfor %}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}{% if stock_filter %}&stock={{ stock_filter }}{% endif %}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}">بعدی</a>
             </li>
             {% endif %}
          </ul>

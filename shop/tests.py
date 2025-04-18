@@ -1,7 +1,7 @@
 from django.test import TestCase,Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from .models import Book, User, Order, OrderItem
+from .models import Book, User, Order, OrderItem,Category
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test.client import RequestFactory
 
@@ -13,7 +13,15 @@ class ShopTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(username='testuser', password='12345',)
+
+        self.user = User.objects.create_user(
+            username='testuser', 
+            password='12345',
+            email='test@example.com')
+        
+        self.category1 = Category.objects.create(name='رمان', slug='roman')
+        self.category2 = Category.objects.create(name='علمی', slug='elmi')
+
         self.book = Book.objects.create(
             title='Test Book',
             author='Test Author',
@@ -21,6 +29,8 @@ class ShopTests(TestCase):
             stock=10,
             description='A test book description'
         )
+        self.book.categories.set([self.category1, self.category2])
+
         self.order = Order.objects.create(user=self.user, status='pending')
         self.order_item = OrderItem.objects.create(order=self.order, book=self.book, quantity=2)
 
@@ -33,6 +43,11 @@ class ShopTests(TestCase):
     def test_book_model(self):
         self.assertEqual(str(self.book), 'Test Book')
         self.assertEqual(self.book.price, 1000)
+        self.assertEqual(self.book.categories.count(), 2) 
+
+    def test_category_model(self):
+        self.assertEqual(str(self.category1),'رمان')
+        self.assertEqual(self.category1.slug, 'roman')
 
     def test_order_model(self):
         self.assertEqual(str(self.order), f"سفارش {self.order.id} - testuser")
@@ -46,12 +61,13 @@ class ShopTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'shop/book_list.html')
         self.assertContains(response, 'Test Book')
-    
+
     def test_book_detail_view(self):
         response = self.client.get(reverse('book_detail', args=[self.book.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'shop/book_detail.html')
         self.assertContains(response, 'Test Author')
+        self.assertContains(response, 'رمان')
 
     def test_signup_view(self):
         response = self.client.get(reverse('signup'))
@@ -145,3 +161,34 @@ class ShopTests(TestCase):
         response = self.client.get(reverse('search_books'), {'q': 'Nothing'})
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, 'Test Book')
+
+    def test_search_books_filters(self):
+        response = self.client.get(reverse('search_books'), {'categories': [self.category1.id]})
+        self.assertEqual(response.status_code,200)
+        self.assertContains(response, 'Test Book')
+
+        response = self.client.get(reverse('search_books'), {'min_price': 1500})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Test Book')
+
+        response = self.client.get(reverse('search_books'), {'stock': 'in_stock'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Book')
+
+    def test_search_books_paginator(self):
+        for i in range(5):
+            book = Book.objects.create(
+                title=f'Book {i}',
+                author='Test Author',
+                price=1000,
+                stock=5
+            )
+            book.categories.set([self.category1])
+            
+        response = self.client.get(reverse('search_books'),{'page':1})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['books']), 3)
+
+        response = self.client.get(reverse('search_books'), {'page': 2})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['books']), 3)
