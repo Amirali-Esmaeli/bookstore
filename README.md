@@ -3,24 +3,33 @@
 # فروشگاه آنلاین کتاب
 یه پروژه فروشگاهی ساده و کاربردی که با **Django** ساخته شده و قابلیت‌های اصلی یه فروشگاه آنلاین رو داره. این پروژه برای یادگیری مفاهیم بک‌اند و آماده‌سازی برای کارآموزی طراحی شده.
 
+## پیش نمایش
+صفحه اصلی با نمایش کتاب‌ها، جستجو، و طراحی ریسپانسیو
+
+## دمو
+- **لینک دمو:** http://amiraliesmaili.pythonanywhere.com/
+- **میزبانی:** پروژه روی PythonAnywhere با دیتابیس MySQL میزبانی شده.
+
 ## ویژگی‌ها
-- **مدیریت محصولات:** نمایش لیست کتاب‌ها، جزئیات هر کتاب (عنوان، نویسنده، قیمت، موجودی)
+- **مدیریت محصولات:** نمایش لیست کتاب‌ها، جزئیات هر کتاب (عنوان، نویسنده، قیمت، موجودی، تصویر جلد، نمونه فایل)
 - **سبد خرید:** اضافه کردن، به‌روزرسانی تعداد و حذف کتاب‌ها از سبد خرید با استفاده از سشن
 - **سفارش‌ها:** ثبت سفارش و نمایش تاریخچه سفارش‌ها برای هر کاربر
 - **احراز هویت:** ثبت‌نام، ورود، خروج، تغییر رمز عبور و بازنشانی رمز عبور
-- **جستجو:** فیلتر کردن کتاب‌ها بر اساس عنوان یا نویسنده
+- **جستجو:** فیلتر کردن کتاب‌ها بر اساس عنوان و نویسنده و توضیحات و قیمت و موجود بودن و مرتب سازی و دسته بندی و نمایش لیست کتاب‌ها با صفحه‌بندی (۳ کتاب در صفحه)
 - **رابط کاربری:** طراحی responsive با **Bootstrap 5**
-- **تست:** تست‌های واحد (Unit Tests) برای اطمینان از عملکرد صحیح ویوها و مدل‌ها
+- **دسته بندی کتاب ها:**اضافه شد تا نشون بده پروژه‌ات امکان سازمان‌دهی و فیلتر بر اساس دسته (مثل رمان، علمی) داره
+- **تست:** تست‌ ها(Tests) برای اطمینان از عملکرد صحیح ویوها و مدل‌ها
 
 ## تکنولوژی‌ها
 - **Django 4.x**: فریم‌ورک اصلی بک‌اند
 - **MySQL**: دیتابیس استفاده شده در این پروژه
 - **Bootstrap 5**: برای رابط کاربری
 - **Python 3.x**: زبان برنامه‌نویسی
+- **JavaScript**: افزودن تعاملات پویا مانند انیمیشن‌های ساده، و اعتبارسنجی فرم‌ها
 
 ## نصب و راه‌اندازی
 1. **پیش‌نیازها:**
-   - Python 3.8 یا بالاتر
+   - Python 3.10 یا بالاتر
    - Git
    - MySQL (برای استفاده از دیتابیس MySQL در پروژه)
    - Pillow (برای پردازش تصاویر)
@@ -82,13 +91,13 @@
 
 **ساختار پروژه:**
 
-- `shop/models.py` : تعریف مدل‌های `User`، `Book`، `Order` و `OrderItem`
-- `shop/admin.py` : ثبت مدل‌ها در پنل ادمین Django
+- `shop/models.py` : مدل‌های `User`، `Book`، `Category`، `Order`، و `OrderItem`
+- `shop/admin.py` : ثبت مدل‌ها در پنل ادمین 
 - `shop/views.py` : منطق مربوط به ویوهای بک‌اند
 - `shop/urls.py` : تعریف مسیرهای URL اپلیکیشن
 - `shop/forms.py` : فرم‌های سفارشی برای ورود، ثبت‌نام، تغییر رمز عبور و غیره
 - `shop/templates/shop/` : قالب‌های HTML مربوط به صفحات مختلف
-- `shop/tests.py` : شامل تست‌های واحد (unit tests) برای بررسی عملکرد بخش‌های مختلف
+- `shop/tests.py` : شامل تست‌ها(tests) برای بررسی عملکرد بخش‌های مختلف
 
 **نکات اضافی**
 
@@ -105,25 +114,33 @@
 # Online Bookstore
 A simple and functional online bookstore project built with Django, featuring core e-commerce functionalities. This project was designed to learn backend concepts and prepare for a backend internship.
 
-## Features
+## Preview
+Homepage with book listings, search, and responsive design
 
-- **Product Management**: Display book list and details (title, author, price, stock)  
+## Demo
+- **Demo Link:** http://amiraliesmaili.pythonanywhere.com/
+- **Hosting:** Hosted on PythonAnywhere with MySQL database.
+
+## Features
+- **Product Management**: Display book list and details (title, author, price, stock, cover image, sample file)  
 - **Shopping Cart**: Add, update quantity, and remove books from the cart using sessions  
 - **Orders**: Place orders and view order history per user  
 - **Authentication**: Sign up, login, logout, password change, and password reset  
-- **Search**: Filter books by title or author  
+- **Search**: You can filter books by title, author, description, price, and availability. with sorting and category with 3 books per page.
 - **User Interface**: Responsive design with Bootstrap 5  
-- **Testing**: Unit tests to ensure proper functionality of views and models  
+- **Book categories**: were added to organize and filter books by type (like novel, science, etc.)
+- **Testing**: tests to ensure proper functionality of views and models  
 
 ## Technologies
 **Django 4.x**: Main backend framework
 **MySQL**: Database used in this project
 **Bootstrap 5**: For the user interface
 **Python 3.x**: Programming language
+**JavaScript**: was used to add dynamic interactions like simple animations and form validation
 
 ## Installation and Setup
 1. **Prerequisites:**
-- Python 3.8 or higher
+- Python 3.10 or higher
 - Git
 - MySQL (for using MySQL database)
 - Pillow (for image processing)
@@ -184,13 +201,13 @@ A simple and functional online bookstore project built with Django, featuring co
     python manage.py test shop
 
 **Project Structure**
-- `shop/models.py`: Defines `User`, `Book`, `Order`, `OrderItem` models
-- `shop/admin.py`: Registers models in Django admin panel
+- `shop/models.py`: Defines `User`, `Book`, `Category`, `Order`, `OrderItem` models
+- `shop/admin.py`: Registers models in admin panel
 - `shop/views.py`: Backend logic for views
 - `shop/urls.py`: URL routes
 - `shop/forms.py`: Custom forms for login, signup, and password change
 - `shop/templates/shop/`: HTML templates
-- `shop/tests.py`: Unit tests
+- `shop/tests.py`: tests
 
 **Additional Notes**
 - Add books via the admin panel (/admin/).
@@ -198,7 +215,7 @@ A simple and functional online bookstore project built with Django, featuring co
 
 **Developer**
 
-- **Name**: Amirali Esmaeli
+- **Name**: Amirali Esmaili
 - **Email**: [amiraliesmaeli741@gmail.com](mailto:amiraliesmaeli741@gmail.com)
 - **GitHub**: [https://github.com/Amirali-Esmaeli](https://github.com/Amirali-Esmaeli?tab=repositories)
 
